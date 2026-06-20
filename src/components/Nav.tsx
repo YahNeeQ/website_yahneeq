@@ -13,7 +13,6 @@ export function Nav() {
             { to: "/", label: "home" },
             { to: "/projects", label: "projects" },
             { to: "/blog", label: "blog" },
-            { to: "/gaming", label: "gaming" },
           ].map((item) => (
             <Link
               key={item.to}
