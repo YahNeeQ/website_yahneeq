@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/yahneeq-logo.png.asset.json";
+import logo from "@/assets/yahneeq-logo.png";
 
 export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link to="/" className="flex items-center" aria-label="YahNeeQ home">
-          <img src={logo.url} alt="YahNeeQ" className="h-7 w-auto" />
+          <img src={logo} alt="YahNeeQ" className="-my-5 h-20 w-auto" />
         </Link>
         <nav className="flex items-center gap-1 text-sm">
           {[
