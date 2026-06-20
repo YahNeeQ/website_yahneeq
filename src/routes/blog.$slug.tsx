@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getPost, posts } from "@/data/posts";
+import { getPost, posts, type Post } from "@/data/posts";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function PostPage() {
-  const { post } = Route.useLoaderData();
+  const { post } = Route.useLoaderData() as { post: Post };
   const idx = posts.findIndex((p) => p.slug === post.slug);
   const next = posts[(idx + 1) % posts.length];
 
