@@ -1,19 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { projects } from "@/data/projects";
+import { getProjects } from "@/data/projects";
 
 export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
       { title: "Projects — YahNeeQ" },
-      { name: "description", content: "Machine learning and computer science projects I've been hacking on." },
+      { name: "description", content: "Machine learning and computer science projects I've been working on." },
       { property: "og:title", content: "Projects — YahNeeQ" },
       { property: "og:description", content: "Machine learning and CS hobby projects." },
     ],
   }),
+  loader: () => getProjects(),
   component: Projects,
 });
 
 function Projects() {
+  const projects = Route.useLoaderData();
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
       <h1 className="text-4xl sm:text-5xl font-bold">projects</h1>

@@ -16,6 +16,8 @@ lerna-debug.log*
 /.tanstack/
 /.nitro/
 /coverage/
+/studio/node_modules/
+/studio/dist/
 
 # Local configuration and secrets
 .env

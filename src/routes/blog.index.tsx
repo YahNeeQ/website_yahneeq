@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { posts } from "@/data/posts";
+import { getPosts } from "@/data/posts";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -10,10 +10,12 @@ export const Route = createFileRoute("/blog/")({
       { property: "og:description", content: "Notes on ML, AI, and CS." },
     ],
   }),
+  loader: () => getPosts(),
   component: Blog,
 });
 
 function Blog() {
+  const posts = Route.useLoaderData();
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
       <h1 className="text-4xl sm:text-5xl font-bold">blog</h1>
@@ -22,6 +24,9 @@ function Blog() {
       </p>
 
       <ul className="mt-12 divide-y divide-border">
+        {posts.length === 0 && (
+          <li className="py-6 text-sm text-muted-foreground">no posts published yet.</li>
+        )}
         {posts.map((p) => (
           <li key={p.slug}>
             <Link

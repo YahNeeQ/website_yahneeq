@@ -19,12 +19,11 @@ function Home() {
       <section className="relative mx-auto max-w-6xl px-6 py-24 sm:py-32">
         <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1 text-xs text-muted-foreground">
           <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-          currently: training small transformers on a single GPU
+          currently: Working on this website
         </div>
         <h1 className="mt-6 text-5xl sm:text-7xl font-bold leading-[1.05]">
           hey, i'm <span className="text-primary">YahNeeQ</span>.<br />
-          <span className="text-muted-foreground">i build stuff with</span>
-          <br /> machine learning & code.
+          <span className="text-muted-foreground">i build stuff.</span>
         </h1>
         <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground">
           this is my hobby corner of the internet — a place where i drop experiments,

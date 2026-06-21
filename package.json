@@ -8,10 +8,16 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "studio:dev": "bun run --cwd studio open",
+    "studio:build": "bun run --cwd studio build",
+    "studio:deploy": "bun run --cwd studio deploy",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@portabletext/react": "^6.2.0",
+    "@portabletext/types": "^4.0.2",
+    "@sanity/client": "^7.23.0",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.83.0",
     "@tanstack/react-router": "^1.168.25",
