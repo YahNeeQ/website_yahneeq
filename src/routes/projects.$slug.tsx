@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 
+import { GitHubButton } from "@/components/GitHubButton";
 import { RichText } from "@/components/RichText";
 import { getProject, getProjects } from "@/data/projects";
 
@@ -50,9 +51,7 @@ function ProjectPage() {
 
       <div className="mt-6 flex items-center justify-between text-xs">
         <span className="font-mono text-primary">[{project.tag}]</span>
-        <span
-          className={project.status === "active" ? "text-foreground" : "text-muted-foreground"}
-        >
+        <span className={project.status === "active" ? "text-foreground" : "text-muted-foreground"}>
           {project.status === "active" ? "● Active" : "○ Archived"}
         </span>
       </div>
@@ -104,14 +103,7 @@ function ProjectPage() {
       )}
 
       {project.repo && (
-        <a
-          href={project.repo}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-10 inline-block text-sm text-primary hover:underline"
-        >
-          View repository →
-        </a>
+        <GitHubButton href={project.repo} label="View repository" className="mt-10" />
       )}
 
       {next && (
