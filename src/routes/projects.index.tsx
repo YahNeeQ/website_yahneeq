@@ -18,9 +18,9 @@ function Projects() {
   const projects = Route.useLoaderData();
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
-      <h1 className="text-4xl sm:text-5xl font-bold">projects</h1>
+      <h1 className="text-4xl sm:text-5xl font-bold">Projects</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        things i'm building or have built. click through for notes.
+        Things I'm building or have built. Click through for notes.
       </p>
 
       <div className="mt-12 grid gap-4 sm:grid-cols-2">
@@ -34,7 +34,7 @@ function Projects() {
             <div className="flex items-center justify-between text-xs">
               <span className="font-mono text-primary">[{p.tag}]</span>
               <span className={p.status === "active" ? "text-foreground" : "text-muted-foreground"}>
-                {p.status === "active" ? "● active" : "○ archived"}
+                {p.status === "active" ? "● Active" : "○ Archived"}
               </span>
             </div>
             <h2 className="mt-4 text-xl font-semibold group-hover:text-primary transition-colors">
@@ -42,7 +42,7 @@ function Projects() {
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
             <div className="mt-4 text-xs text-muted-foreground group-hover:text-primary transition-colors">
-              read more →
+              Read more →
             </div>
           </Link>
         ))}

@@ -4,6 +4,25 @@ import type { PortableTextBlock } from "@portabletext/types";
 import type { ContentBlock } from "@/data/projects";
 
 const components: PortableTextComponents = {
+  marks: {
+    link: ({ children, value }) => {
+      const href = typeof value?.href === "string" ? value.href : "";
+      const safeHref =
+        href.startsWith("/") || /^https?:\/\//i.test(href) ? href : "#";
+      const external = /^https?:\/\//i.test(safeHref);
+
+      return (
+        <a
+          href={safeHref}
+          target={external ? "_blank" : undefined}
+          rel={external ? "noopener noreferrer" : undefined}
+          className="text-primary underline underline-offset-4"
+        >
+          {children}
+        </a>
+      );
+    },
+  },
   types: {
     image: ({ value }) => (
       <figure>

@@ -17,16 +17,16 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-primary">404</h1>
-        <h2 className="mt-4 text-xl font-semibold">page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          this URL doesn't lead anywhere yet.
+          This URL doesn't lead anywhere yet.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
-            go home
+            Go home
           </Link>
         </div>
       </div>
@@ -41,16 +41,16 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold">something broke</h1>
-        <p className="mt-2 text-sm text-muted-foreground">try again or head home.</p>
+        <h1 className="text-xl font-semibold">Something broke</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Try again or head home.</p>
         <div className="mt-6 flex justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
-            try again
+            Try again
           </button>
-          <a href="/" className="rounded-md border border-input px-4 py-2 text-sm font-medium hover:bg-accent/10">go home</a>
+          <a href="/" className="rounded-md border border-input px-4 py-2 text-sm font-medium hover:bg-accent/10">Go home</a>
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@ function RootComponent() {
         <Nav />
         <main className="flex-1"><Outlet /></main>
         <footer className="border-t border-border/60 py-8 text-center text-xs text-muted-foreground">
-          built with curiosity · © {new Date().getFullYear()} YahNeeQ
+          Built with curiosity · © {new Date().getFullYear()} YahNeeQ
         </footer>
       </div>
     </QueryClientProvider>

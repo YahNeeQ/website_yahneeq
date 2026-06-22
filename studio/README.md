@@ -16,4 +16,4 @@ To host the editor through Sanity:
 bun run deploy
 ```
 
-The public website reads published projects and blog posts from the `production` dataset.
+The public website reads published projects and notes from the `production` dataset.

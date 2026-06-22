@@ -3,7 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { RichText } from "@/components/RichText";
 import { getPost, getPosts } from "@/data/posts";
 
-export const Route = createFileRoute("/blog/$slug")({
+export const Route = createFileRoute("/notes/$slug")({
   loader: async ({ params }) => {
     const [post, posts] = await Promise.all([getPost({ data: params.slug }), getPosts()]);
     if (!post) throw notFound();
@@ -22,27 +22,27 @@ export const Route = createFileRoute("/blog/$slug")({
   notFoundComponent: () => (
     <div className="mx-auto max-w-3xl px-6 py-24">
       <p className="font-mono text-sm text-primary">404</p>
-      <h1 className="mt-2 text-3xl font-bold">post not found</h1>
+      <h1 className="mt-2 text-3xl font-bold">Note not found</h1>
       <Link
-        to="/blog"
+        to="/notes"
         className="mt-6 inline-block text-sm text-muted-foreground hover:text-primary"
       >
-        ← back to blog
+        ← Back to notes
       </Link>
     </div>
   ),
-  component: PostPage,
+  component: NotePage,
 });
 
-function PostPage() {
+function NotePage() {
   const { post, posts } = Route.useLoaderData();
   const index = posts.findIndex((item) => item.slug === post.slug);
   const next = posts.length > 1 ? posts[(index + 1) % posts.length] : undefined;
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
-      <Link to="/blog" className="font-mono text-xs text-muted-foreground hover:text-primary">
-        ← blog
+      <Link to="/notes" className="font-mono text-xs text-muted-foreground hover:text-primary">
+        ← Notes
       </Link>
 
       <div className="mt-6 flex items-center gap-3 font-mono text-xs text-muted-foreground">
@@ -67,9 +67,9 @@ function PostPage() {
 
       {next && (
         <div className="mt-16 border-t border-border pt-6 text-sm">
-          <span className="text-muted-foreground">next →</span>{" "}
+          <span className="text-muted-foreground">Next →</span>{" "}
           <Link
-            to="/blog/$slug"
+            to="/notes/$slug"
             params={{ slug: next.slug }}
             className="text-primary hover:underline"
           >

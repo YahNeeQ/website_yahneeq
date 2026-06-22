@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { sanityClient } from "@/lib/sanity";
+import { validateSlug } from "@/lib/validation";
 
 export type ContentImage = {
   url: string;
@@ -89,7 +90,7 @@ export const getProjects = createServerFn({ method: "GET" }).handler(
 );
 
 export const getProject = createServerFn({ method: "GET" })
-  .inputValidator((slug: string) => slug)
+  .validator(validateSlug)
   .handler(async ({ data: slug }): Promise<Project | null> => {
     try {
       return await sanityClient.fetch<Project | null>(

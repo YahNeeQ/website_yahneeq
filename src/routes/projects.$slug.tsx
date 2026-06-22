@@ -25,12 +25,12 @@ export const Route = createFileRoute("/projects/$slug")({
   notFoundComponent: () => (
     <div className="mx-auto max-w-3xl px-6 py-24">
       <p className="font-mono text-sm text-primary">404</p>
-      <h1 className="mt-2 text-3xl font-bold">project not found</h1>
+      <h1 className="mt-2 text-3xl font-bold">Project not found</h1>
       <Link
         to="/projects"
         className="mt-6 inline-block text-sm text-muted-foreground hover:text-primary"
       >
-        ← back to projects
+        ← Back to projects
       </Link>
     </div>
   ),
@@ -45,7 +45,7 @@ function ProjectPage() {
   return (
     <article className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
       <Link to="/projects" className="font-mono text-xs text-muted-foreground hover:text-primary">
-        ← projects
+        ← Projects
       </Link>
 
       <div className="mt-6 flex items-center justify-between text-xs">
@@ -53,7 +53,7 @@ function ProjectPage() {
         <span
           className={project.status === "active" ? "text-foreground" : "text-muted-foreground"}
         >
-          {project.status === "active" ? "● active" : "○ archived"}
+          {project.status === "active" ? "● Active" : "○ Archived"}
         </span>
       </div>
 
@@ -110,13 +110,13 @@ function ProjectPage() {
           rel="noreferrer"
           className="mt-10 inline-block text-sm text-primary hover:underline"
         >
-          view repository →
+          View repository →
         </a>
       )}
 
       {next && (
         <div className="mt-16 border-t border-border pt-6 text-sm">
-          <span className="text-muted-foreground">next →</span>{" "}
+          <span className="text-muted-foreground">Next →</span>{" "}
           <Link
             to="/projects/$slug"
             params={{ slug: next.slug }}
