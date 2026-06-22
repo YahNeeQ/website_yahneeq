@@ -5,8 +5,9 @@ readonly DEPLOY_USER="yannick"
 readonly HOME_DIR="/home/yannick"
 readonly REPO_DIR="${HOME_DIR}/yahneeq-website"
 readonly BUN="${HOME_DIR}/.bun/bin/bun"
-readonly GITHUB_REPO="YahNeeQ/webysite"
+readonly GITHUB_REPO="YahNeeQ/website_yahneeq"
 readonly LOCK_FILE="/run/lock/yahneeq-deploy.lock"
+readonly DEPLOY_MARKER="${REPO_DIR}/.deployed-commit"
 
 exec 9>"${LOCK_FILE}"
 /usr/bin/flock -n 9 || exit 0
@@ -29,8 +30,12 @@ run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" fetch --quiet --prune origin ma
 
 current_commit="$(run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" rev-parse HEAD)"
 remote_commit="$(run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" rev-parse origin/main)"
+deployed_commit=""
+if [[ -f "${DEPLOY_MARKER}" ]]; then
+  deployed_commit="$(<"${DEPLOY_MARKER}")"
+fi
 
-if [[ "${current_commit}" == "${remote_commit}" ]]; then
+if [[ "${deployed_commit}" == "${remote_commit}" ]]; then
   exit 0
 fi
 
@@ -130,4 +135,6 @@ if [[ "${healthy}" != "true" ]]; then
 fi
 
 trap - ERR
+/usr/bin/printf '%s\n' "${remote_commit}" >"${DEPLOY_MARKER}"
+/usr/bin/chown "${DEPLOY_USER}:${DEPLOY_USER}" "${DEPLOY_MARKER}"
 echo "Deployed ${remote_commit} successfully"
