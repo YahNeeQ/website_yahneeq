@@ -19,6 +19,7 @@ lerna-debug.log*
 /coverage/
 /studio/node_modules/
 /studio/dist/
+/studio/.sanity/
 
 # Local configuration and secrets
 .env
