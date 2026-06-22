@@ -1,0 +1,11 @@
+[Unit]
+Description=Check GitHub periodically for a verified YahNeeQ release
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+RandomizedDelaySec=30s
+AccuracySec=15s
+
+[Install]
+WantedBy=timers.target

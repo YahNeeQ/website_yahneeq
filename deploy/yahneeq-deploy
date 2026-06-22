@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly DEPLOY_USER="yannick"
+readonly HOME_DIR="/home/yannick"
+readonly REPO_DIR="${HOME_DIR}/yahneeq-website"
+readonly BUN="${HOME_DIR}/.bun/bin/bun"
+readonly GITHUB_REPO="ynnckvr/webysite"
+readonly LOCK_FILE="/run/lock/yahneeq-deploy.lock"
+
+exec 9>"${LOCK_FILE}"
+/usr/bin/flock -n 9 || exit 0
+
+run_as_deploy_user() {
+  /usr/sbin/runuser -u "${DEPLOY_USER}" -- \
+    /usr/bin/env \
+      HOME="${HOME_DIR}" \
+      PATH="${HOME_DIR}/.bun/bin:/usr/local/bin:/usr/bin:/bin" \
+      BUN_INSTALL_CACHE_DIR="${REPO_DIR}/.bun-cache" \
+      "$@"
+}
+
+if [[ ! -x "${BUN}" || ! -d "${REPO_DIR}/.git" ]]; then
+  echo "Deployment prerequisites are missing" >&2
+  exit 1
+fi
+
+run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" fetch --quiet --prune origin main
+
+current_commit="$(run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" rev-parse HEAD)"
+remote_commit="$(run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" rev-parse origin/main)"
+
+if [[ "${current_commit}" == "${remote_commit}" ]]; then
+  exit 0
+fi
+
+current_branch="$(run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" branch --show-current)"
+if [[ "${current_branch}" != "main" ]]; then
+  echo "Refusing deployment because the checked-out branch is ${current_branch}, not main" >&2
+  exit 1
+fi
+
+if [[ -n "$(run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" status --porcelain --untracked-files=no)" ]]; then
+  echo "Refusing deployment because tracked files have local changes" >&2
+  exit 1
+fi
+
+checks_file="$(/usr/bin/mktemp)"
+backup_dir="$(/usr/bin/mktemp -d)"
+cleanup() {
+  /usr/bin/rm -f "${checks_file}"
+  /usr/bin/rm -rf "${backup_dir}"
+}
+trap cleanup EXIT
+
+/usr/bin/curl --fail --silent --show-error --location \
+  --header "Accept: application/vnd.github+json" \
+  --header "X-GitHub-Api-Version: 2022-11-28" \
+  "https://api.github.com/repos/${GITHUB_REPO}/commits/${remote_commit}/check-runs" \
+  --output "${checks_file}"
+
+set +e
+/usr/bin/python3 - "${checks_file}" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as checks_file:
+    runs = [
+        run
+        for run in json.load(checks_file).get("check_runs", [])
+        if run.get("name") == "Build"
+    ]
+
+if not runs:
+    raise SystemExit(2)
+
+latest = max(runs, key=lambda run: run.get("id", 0))
+if latest.get("status") != "completed":
+    raise SystemExit(2)
+if latest.get("conclusion") != "success":
+    raise SystemExit(1)
+PY
+check_result=$?
+set -e
+
+if [[ ${check_result} -eq 2 ]]; then
+  echo "GitHub build check is not complete; deployment will retry later"
+  exit 0
+fi
+if [[ ${check_result} -ne 0 ]]; then
+  echo "GitHub build check failed; refusing deployment" >&2
+  exit 1
+fi
+
+if [[ -d "${REPO_DIR}/dist" ]]; then
+  /usr/bin/cp -a "${REPO_DIR}/dist" "${backup_dir}/dist"
+fi
+
+rollback() {
+  trap - ERR
+  echo "Deployment failed; restoring the previous release" >&2
+  run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" reset --hard "${current_commit}" || true
+  /usr/bin/rm -rf "${REPO_DIR}/dist"
+  if [[ -d "${backup_dir}/dist" ]]; then
+    /usr/bin/cp -a "${backup_dir}/dist" "${REPO_DIR}/dist"
+    /usr/bin/chown -R "${DEPLOY_USER}:${DEPLOY_USER}" "${REPO_DIR}/dist"
+  fi
+  run_as_deploy_user "${BUN}" install --cwd "${REPO_DIR}" --frozen-lockfile || true
+  /usr/bin/systemctl restart yahneeq.service || true
+}
+trap rollback ERR
+
+run_as_deploy_user /usr/bin/git -C "${REPO_DIR}" merge --ff-only "${remote_commit}"
+run_as_deploy_user "${BUN}" install --cwd "${REPO_DIR}" --frozen-lockfile
+run_as_deploy_user "${BUN}" run --cwd "${REPO_DIR}" build
+/usr/bin/systemctl restart yahneeq.service
+
+healthy=false
+for _ in {1..15}; do
+  if /usr/bin/curl --fail --silent --show-error http://127.0.0.1:3000/ >/dev/null; then
+    healthy=true
+    break
+  fi
+  /usr/bin/sleep 1
+done
+
+if [[ "${healthy}" != "true" ]]; then
+  echo "Website health check failed" >&2
+  false
+fi
+
+trap - ERR
+echo "Deployed ${remote_commit} successfully"
