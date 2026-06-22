@@ -4,7 +4,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "YahNeeQ — ML, AI & CS Hobby Projects" },
-      { name: "description", content: "I tinker with machine learning, AI systems, and computer science. Here's what I'm building and writing about." },
+      { name: "description", content: "I tinker with machine learning, AI systems, and computer science. Here's what I'm building." },
       { property: "og:title", content: "YahNeeQ — ML, AI & CS Hobby Projects" },
       { property: "og:description", content: "I tinker with machine learning, AI systems, and computer science." },
     ],
@@ -27,15 +27,12 @@ function Home() {
         </h1>
         <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground">
           This is my hobby corner of the internet — a place where I drop experiments,
-          half-finished projects, and notes on AI, ML, and computer science as I learn.
+          half-finished projects, and things I learn about AI, ML, and computer science.
           No agenda, no newsletter, just things I find cool.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link to="/projects" className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
             See projects →
-          </Link>
-          <Link to="/notes" className="rounded-md border border-border bg-card/40 px-5 py-2.5 text-sm font-medium hover:bg-card/80 transition-colors">
-            Read the notes
           </Link>
         </div>
         <a
@@ -63,7 +60,7 @@ function Home() {
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
             { t: "Experiments", d: "Training runs, model tinkering, and weird ideas I wanted to see work." },
-            { t: "Writing", d: "Notes on papers, things that clicked for me, and lessons from failed builds." },
+            { t: "Builds", d: "Finished projects, work in progress, and lessons from things that failed." },
             { t: "Code", d: "Small open repositories — utilities, demos, and reference implementations." },
           ].map((x) => (
             <div key={x.t} className="group rounded-lg border border-border bg-card/40 p-6 transition-colors hover:border-primary/60">

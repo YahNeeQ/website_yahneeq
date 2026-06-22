@@ -20,7 +20,7 @@ function Projects() {
     <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
       <h1 className="text-4xl sm:text-5xl font-bold">Projects</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        Things I'm building or have built. Click through for notes.
+        Things I'm building or have built. Click through for details.
       </p>
 
       <div className="mt-12 grid gap-4 sm:grid-cols-2">
