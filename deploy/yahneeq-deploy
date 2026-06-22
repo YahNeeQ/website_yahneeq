@@ -5,7 +5,7 @@ readonly DEPLOY_USER="yannick"
 readonly HOME_DIR="/home/yannick"
 readonly REPO_DIR="${HOME_DIR}/yahneeq-website"
 readonly BUN="${HOME_DIR}/.bun/bin/bun"
-readonly GITHUB_REPO="ynnckvr/webysite"
+readonly GITHUB_REPO="YahNeeQ/webysite"
 readonly LOCK_FILE="/run/lock/yahneeq-deploy.lock"
 
 exec 9>"${LOCK_FILE}"
